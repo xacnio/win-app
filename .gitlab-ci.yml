@@ -452,7 +452,7 @@ mirror:
 i18n-sync-crowdin-redesign_2024:
   extends: .i18n-sync-crowdin-common
   variables:
-    I18N_SYNC_BRANCH: 'redesign'
+    I18N_SYNC_BRANCH: 'develop-v4'
     L10N_COMMUNITY_BRANCH_SCOPE: 'Redesign_2024'
     I18N_SYNC_CROWDIN_PROJECT: 'windows-vpn-redesign'
 
@@ -460,23 +460,23 @@ i18n-commit-translations-redesign_2024:
   extends: .i18n-commit-locales-shared
   variables:
     I18N_COMMIT_CROWDIN_PROJECT: 'windows-vpn-redesign'
-    I18N_COMMIT_BRANCH_PUSH: redesign
-    I18N_COMMIT_BRANCH_ALLOWED: redesign
+    I18N_COMMIT_BRANCH_PUSH: develop-v4
+    I18N_COMMIT_BRANCH_ALLOWED: develop-v4
   before_script:
     - git config --global core.autocrlf false
 
 i18n-sync-crowdin-installer:
   extends: .i18n-sync-crowdin-common
   variables:
-    I18N_SYNC_BRANCH: 'redesign'
+    I18N_SYNC_BRANCH: 'develop-v4'
     I18N_SYNC_CROWDIN_PROJECT: 'windows-vpn-installer'
 
 i18n-commit-translations-installer:
   extends: .i18n-commit-locales-shared
   variables:
     I18N_COMMIT_CROWDIN_PROJECT: 'windows-vpn-installer'
-    I18N_COMMIT_BRANCH_PUSH: redesign
-    I18N_COMMIT_BRANCH_ALLOWED: redesign
+    I18N_COMMIT_BRANCH_PUSH: develop-v4
+    I18N_COMMIT_BRANCH_ALLOWED: develop-v4
   before_script:
     - git config --global core.autocrlf false
 
@@ -489,7 +489,7 @@ create-release:
   only:
     refs:
       - develop
-      - redesign
+      - develop-v*
   script:
     - apt-get update && apt-get install -y python3 python3-pip git
     - python3 ci/build-scripts/release.py
