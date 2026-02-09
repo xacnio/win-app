@@ -416,8 +416,10 @@ publish prod release nexus:
 
 mirror:
   stage: mirror
+  needs: []
   tags:
     - windows
+  when: manual
   only:
     refs:
       - tags
