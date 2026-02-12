@@ -23,7 +23,10 @@
     name: "result-ui"
     paths:
       - $SCREENSHOT_PATH
+      - TestResults/
     expire_in: 1 weeks
+    reports:
+      junit: TestResults/*.xml
   
 .unit_test_config:
   stage: test
