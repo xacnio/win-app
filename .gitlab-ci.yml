@@ -1,17 +1,18 @@
 include:
-  - project: 'translations/generator'
-    ref: master
-    file: '/jobs/commit-locales.gitlab-ci.yml'
-
-  - project: 'translations/generator'
-    ref: master
-    file: '/jobs/sync-crowdin.gitlab-ci.yml'
-
   - project: 'ProtonVPN/qa/test-configuration'
     ref: master
     file: '/windows-config.yml'
 
   - local: '/.gitlab-ci-templates.yml'
+
+  - component: $CI_SERVER_HOST/translations/ci/groups@~latest
+    inputs:
+      stage: deploy
+      before_script_weeklymr: 
+        - git config --global core.autocrlf false
+      projects:
+        - windows-vpn-redesign
+        - windows-vpn-installer
 
   - component: $CI_SERVER_HOST/proton/devops/cicd-components/tools/artifactlift/release-candidate@~latest
     inputs:
@@ -448,37 +449,6 @@ mirror:
     - git remote add public $PUBLIC_REPO_URL
     - git push public master
     - git push public "$(git describe --abbrev=0)"
-
-i18n-sync-crowdin-redesign_2024:
-  extends: .i18n-sync-crowdin-common
-  variables:
-    I18N_SYNC_BRANCH: 'develop-v4'
-    L10N_COMMUNITY_BRANCH_SCOPE: 'Redesign_2024'
-    I18N_SYNC_CROWDIN_PROJECT: 'windows-vpn-redesign'
-
-i18n-commit-translations-redesign_2024:
-  extends: .i18n-commit-locales-shared
-  variables:
-    I18N_COMMIT_CROWDIN_PROJECT: 'windows-vpn-redesign'
-    I18N_COMMIT_BRANCH_PUSH: develop-v4
-    I18N_COMMIT_BRANCH_ALLOWED: develop-v4
-  before_script:
-    - git config --global core.autocrlf false
-
-i18n-sync-crowdin-installer:
-  extends: .i18n-sync-crowdin-common
-  variables:
-    I18N_SYNC_BRANCH: 'develop-v4'
-    I18N_SYNC_CROWDIN_PROJECT: 'windows-vpn-installer'
-
-i18n-commit-translations-installer:
-  extends: .i18n-commit-locales-shared
-  variables:
-    I18N_COMMIT_CROWDIN_PROJECT: 'windows-vpn-installer'
-    I18N_COMMIT_BRANCH_PUSH: develop-v4
-    I18N_COMMIT_BRANCH_ALLOWED: develop-v4
-  before_script:
-    - git config --global core.autocrlf false
 
 create-release:
   image: $HARBOR_URL/docker.io/library/python:latest
