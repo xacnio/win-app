@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025 Proton AG
  *
  * This file is part of ProtonVPN.
@@ -17,11 +17,6 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace ProtonVPN.Client.Logic.Auth.Contracts.Enums;
+namespace ProtonVPN.Client.Logic.Users.Contracts.Messages;
 
-public enum LogoutReason
-{
-    UserAction,
-    SessionExpired,
-    ClientOutdated,
-}
+public class NoVpnConnectionsAssignedMessage;
