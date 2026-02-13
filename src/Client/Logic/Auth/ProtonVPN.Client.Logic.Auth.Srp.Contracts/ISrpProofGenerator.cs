@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,18 +17,12 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.Security;
+using ProtonVPN.Api.Contracts.Auth;
 
-namespace ProtonVPN.Common.Legacy.Go;
+namespace ProtonVPN.Client.Logic.Auth.Srp.Contracts;
 
-public struct GoBytes
+public interface ISrpProofGenerator
 {
-    // Pointer to the UTF-8 encoded string buffer
-    public IntPtr Data;
-
-    // Length of the string buffer in bytes
-    public IntPtr Length;
-
-    // Total size of the buffer in bytes
-    public IntPtr Capacity;
+    SrpProof? GenerateProof(SecureString password, AuthInfoResponse authInfoResponse);
 }

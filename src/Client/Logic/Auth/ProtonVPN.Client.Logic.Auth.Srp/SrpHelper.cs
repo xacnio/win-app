@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,18 +17,13 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace ProtonVPN.Client.Logic.Auth.Srp;
 
-namespace ProtonVPN.Common.Legacy.Go;
-
-public struct GoBytes
+public static class SrpHelper
 {
-    // Pointer to the UTF-8 encoded string buffer
-    public IntPtr Data;
-
-    // Length of the string buffer in bytes
-    public IntPtr Length;
-
-    // Total size of the buffer in bytes
-    public IntPtr Capacity;
+    public static void DisposeProof(ref FfiSrpProof proof)
+    {
+        NativeMethods.FreeProof(ref proof);
+        proof = default;
+    }
 }

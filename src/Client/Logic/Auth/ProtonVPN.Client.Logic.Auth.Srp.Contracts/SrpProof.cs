@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,18 +17,13 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace ProtonVPN.Client.Logic.Auth.Srp.Contracts;
 
-namespace ProtonVPN.Common.Legacy.Go;
-
-public struct GoBytes
+public class SrpProof
 {
-    // Pointer to the UTF-8 encoded string buffer
-    public IntPtr Data;
+    public required string ClientProof { get; init; }
 
-    // Length of the string buffer in bytes
-    public IntPtr Length;
+    public required string ClientEphemeral { get; init; }
 
-    // Total size of the buffer in bytes
-    public IntPtr Capacity;
+    public required string ExpectedServerProof { get; init; }
 }
