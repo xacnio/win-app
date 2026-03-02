@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2023 Proton AG
+ * Copyright (c) 2025 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,20 +17,9 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using Microsoft.UI.Xaml.Data;
+using ProtonVPN.Client.Core.Models;
 
-namespace ProtonVPN.Client.Common.UI.Converters;
+namespace ProtonVPN.Client.UI.Overlays.Selection.Contracts;
 
-public class NotNullToBooleanConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, string language)
-    {
-        return value is not null && !string.IsNullOrEmpty(value.ToString());
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        throw new NotImplementedException();
-    }
-}
+public interface IAppSelector : ISelector<SelectableTunnelingApp>
+{ }

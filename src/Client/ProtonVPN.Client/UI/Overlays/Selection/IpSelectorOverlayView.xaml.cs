@@ -17,18 +17,20 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Specialized;
 using Microsoft.UI.Xaml;
 using ProtonVPN.Client.Core.Bases;
 
-namespace ProtonVPN.Client.UI.Main.Features.KillSwitch;
+namespace ProtonVPN.Client.UI.Overlays.Selection;
 
-public sealed partial class KillSwitchWidgetView : IContextAware
+public sealed partial class IpSelectorOverlayView : IContextAware
 {
-    public KillSwitchWidgetViewModel ViewModel { get; }
+    public IpSelectorOverlayViewModel ViewModel { get; }
 
-    public KillSwitchWidgetView()
+    public IpSelectorOverlayView()
     {
-        ViewModel = App.GetService<KillSwitchWidgetViewModel>();
+        ViewModel = App.GetService<IpSelectorOverlayViewModel>();
+        ViewModel.Addresses.CollectionChanged += OnAddressesCollectionChanged;
 
         InitializeComponent();
 
@@ -51,13 +53,11 @@ public sealed partial class KillSwitchWidgetView : IContextAware
         ViewModel.Deactivate();
     }
 
-    private void OnWidgetFlyoutOpened(object sender, object e)
+    private void OnAddressesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        ViewModel.IsFeatureFlyoutOpened = true;
-    }
-
-    private void OnWidgetFlyoutClosed(object sender, object e)
-    {
-        ViewModel.IsFeatureFlyoutOpened = false;
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems?.Count > 0)
+        {
+            AddressesListView.ScrollIntoView(e.NewItems[e.NewItems.Count - 1]);
+        }
     }
 }

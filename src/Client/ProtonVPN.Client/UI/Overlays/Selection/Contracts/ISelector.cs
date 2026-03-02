@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2023 Proton AG
+ * Copyright (c) 2025 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,20 +17,13 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using Microsoft.UI.Xaml.Data;
+namespace ProtonVPN.Client.UI.Overlays.Selection.Contracts;
 
-namespace ProtonVPN.Client.Common.UI.Converters;
-
-public class NotNullToBooleanConverter : IValueConverter
+public interface ISelector<T>
 {
-    public object Convert(object value, Type targetType, object parameter, string language)
-    {
-        return value is not null && !string.IsNullOrEmpty(value.ToString());
-    }
+    string Title { get; set; }
 
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        throw new NotImplementedException();
-    }
+    string Description { get; set; }
+
+    Task<List<T>?> SelectAsync(List<T> items);
 }

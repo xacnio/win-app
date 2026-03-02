@@ -22,11 +22,20 @@ using Microsoft.UI.Xaml.Data;
 
 namespace ProtonVPN.Client.Common.UI.Converters;
 
-public class NotNullToBooleanConverter : IValueConverter
+public class BooleanToOpacityConverter : IValueConverter
 {
+    public double OpacityWhenTrue { get; set; } = 1.0;
+    public double OpacityWhenFalse { get; set; } = 0.6;
+    public double OpacityWhenNull { get; set; } = 1.0;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        return value is not null && !string.IsNullOrEmpty(value.ToString());
+        if (value is bool boolValue)
+        {
+            return boolValue ? OpacityWhenTrue : OpacityWhenFalse;
+        }
+
+        return OpacityWhenNull;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

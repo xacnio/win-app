@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2023 Proton AG
+ * Copyright (c) 2025 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -17,20 +17,25 @@
  * along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using Microsoft.UI.Xaml.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ProtonVPN.Client.Common.UI.Converters;
+namespace ProtonVPN.Client.Core.Models;
 
-public class NotNullToBooleanConverter : IValueConverter
+public partial class Selectable<T> : ObservableObject
 {
-    public object Convert(object value, Type targetType, object parameter, string language)
-    {
-        return value is not null && !string.IsNullOrEmpty(value.ToString());
-    }
+    [ObservableProperty]
+    private T _value;
 
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    [ObservableProperty]
+    private bool _isSelected;
+
+    public Selectable(T value)
+        : this(value, true)
+    { }
+
+    public Selectable(T value, bool isSelected)
     {
-        throw new NotImplementedException();
+        Value = value;
+        IsSelected = isSelected;
     }
 }
