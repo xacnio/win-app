@@ -134,6 +134,10 @@ public partial class LoginPageViewModel : PageViewModelBase<IMainWindowViewNavig
                             await ChildViewNavigator.NavigateToSignInViewAsync();
                             break;
 
+                        case AuthError.NoVpnAccess:
+                            await ParentViewNavigator.NavigateToNoServersViewAsync();
+                            break;
+
                         case AuthError.Unknown:
                             SetErrorMessage(message.ErrorMessage);
                             break;
@@ -159,7 +163,6 @@ public partial class LoginPageViewModel : PageViewModelBase<IMainWindowViewNavig
             switch (message.Reason)
             {
                 case LogoutReason.UserAction:
-                case LogoutReason.NoVpnConnectionsAssigned:
                     break;
                 case LogoutReason.SessionExpired:
                     SetErrorMessage(Localizer.Get("Login_Error_SessionExpired"));
@@ -289,6 +292,21 @@ public partial class LoginPageViewModel : PageViewModelBase<IMainWindowViewNavig
     private void ClearMessage()
     {
         IsMessageVisible = false;
+    }
+
+    protected override void OnActivated()
+    {
+        base.OnActivated();
+
+        if (_mainWindowActivator.Window is MainWindow mainWindow)
+        {
+            mainWindow.InvalidateWindowResizeCapabilities(canResize: false);
+        }
+    }
+
+    protected override void OnDeactivated()
+    {
+        base.OnDeactivated();
     }
 
     partial void OnIsMessageVisibleChanged(bool value)

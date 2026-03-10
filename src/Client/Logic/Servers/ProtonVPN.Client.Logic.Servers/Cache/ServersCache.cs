@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -115,6 +115,11 @@ public class ServersCache : IServersCache,
         return Servers is null || Servers.Count == 0;
     }
 
+    public bool AreAllServersUnderMaintenance()
+    {
+        return Servers.All(s => s.IsUnderMaintenance());
+    }
+
     public bool IsStale()
     {
         return _deviceCountryLocation != _settings.DeviceLocation?.CountryCode
@@ -139,6 +144,18 @@ public class ServersCache : IServersCache,
     public bool HasGatewaysAndNoCountries()
     {
         return Gateways.Any() && !Countries.Any();
+    }
+
+    public bool HasNoServers()
+    {
+#if DEBUG
+        if (_settings.SkipNoConnectionsPage)
+        {
+            return false;
+        }
+#endif
+
+        return IsEmpty() || AreAllServersUnderMaintenance();
     }
 
     private T GetWithReadLock<T>(Func<T> func)
@@ -219,7 +236,7 @@ public class ServersCache : IServersCache,
                 {
                     _settings.LogicalsLastModifiedDate = response.LastModified.Value;
                 }
-                
+
                 if (response.IsNotModified)
                 {
                     _logger.Info<ApiLog>("API: Get servers response was not modified since last call, using cached data.");
@@ -491,7 +508,7 @@ public class ServersCache : IServersCache,
 
     private bool IsUnderMaintenance<T>(IGrouping<T, Server> servers, Func<Server, bool>? filterFunc = null)
     {
-        return !servers.Any(s => (filterFunc == null || filterFunc(s)) 
+        return !servers.Any(s => (filterFunc == null || filterFunc(s))
                               && !s.IsUnderMaintenance());
     }
 
@@ -644,6 +661,10 @@ public class ServersCache : IServersCache,
 
                 SaveToFile(deviceCountryLocation, userMaxTier, servers);
                 ProcessServers(deviceCountryLocation, userMaxTier, servers);
+            }
+            else
+            {
+                _logger.Warn<ApiLog>($"API: Get server by name returned with Code: {response.ResponseMessage?.StatusCode}, Error: {response.Error}");
             }
 
             return response;

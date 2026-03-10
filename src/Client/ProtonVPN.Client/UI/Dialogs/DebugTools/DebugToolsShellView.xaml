@@ -28,6 +28,7 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:tkui="using:CommunityToolkit.WinUI"
              xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+             x:DefaultBindMode="OneWay"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -235,6 +236,14 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
                                       IsTabStop="False"
                                       Style="{StaticResource DefaultSettingsCardStyle}">
                     <Button Command="{x:Bind ViewModel.TriggerSettingsTelemetryHeartbeatCommand, Mode=OneTime}"
+                            Content="Trigger"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsCard Header="VPN Plan update"
+                                      IsTabStop="False"
+                                      Style="{StaticResource DefaultSettingsCardStyle}">
+                    <Button Command="{x:Bind ViewModel.TriggerVpnPlanUpdateCommand, Mode=OneTime}"
                             Content="Trigger"
                             Style="{StaticResource PrimaryButtonStyle}" />
                 </toolkit:SettingsCard>

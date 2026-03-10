@@ -40,7 +40,9 @@ public class ProfileRobot
 
     protected Element NetShieldLevelOneMenuItem = Element.ByAutomationId("NetShieldLevelOneMenuItem");
 
-    protected Element NetShieldLevelTwoMenuItem = Element.ByAutomationId("NetShieldLevelTwoMenuItem");
+    protected Element NetShieldLevelTwoMenuItem = Element.ByAutomationId("NetShieldLevelTwoMenuItem");   
+
+    protected Element NetShieldLevelThreeMenuItem = Element.ByAutomationId("NetShieldLevelThreeMenuItem");
 
     protected Element PortForwardingDropDown = Element.ByAutomationId("PortForwardingDropDown");
 
@@ -68,6 +70,8 @@ public class ProfileRobot
 
     protected Element ModerateNatMenuItem = Element.ByAutomationId("ModerateNatMenuItem");
 
+    protected Element CountryDropdown = Element.ByName("Country").And(Element.ByClassName("ComboBox"));
+
     public ProfileRobot SetProfileName(string profileName)
     {
         ProfileNameTextBox.SetText(profileName);
@@ -83,6 +87,13 @@ public class ProfileRobot
     public ProfileRobot SaveProfile()
     {
         ApplyButton.Invoke();
+        return this;
+    }
+
+    public ProfileRobot SelectCountry(string countryName)
+    {
+        CountryDropdown.Click()
+            .SelectDropdownItem(countryName);
         return this;
     }
 
@@ -135,13 +146,17 @@ public class ProfileRobot
 
         Thread.Sleep(TestConstants.AnimationDelay);
 
-        if (netShieldMode == NetShieldMode.BlockMalwareOnly)
+        switch (netShieldMode)
         {
-            NetShieldLevelOneMenuItem.DoubleClick();
-        }
-        else if (netShieldMode == NetShieldMode.BlockAdsMalwareTrackers)
-        {
-            NetShieldLevelTwoMenuItem.DoubleClick();
+            case NetShieldMode.BlockMalwareOnly:
+                NetShieldLevelOneMenuItem.DoubleClick();
+                break;
+            case NetShieldMode.BlockAdsMalwareTrackers:
+                NetShieldLevelTwoMenuItem.DoubleClick();
+                break;
+            case NetShieldMode.BlockAdsMalwareTrackersAdultContent:
+                NetShieldLevelThreeMenuItem.DoubleClick();
+                break;
         }
 
         return this;

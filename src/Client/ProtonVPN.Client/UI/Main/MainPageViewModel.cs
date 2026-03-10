@@ -124,6 +124,7 @@ public partial class MainPageViewModel : PageViewModelBase<IMainWindowViewNaviga
     {
         base.OnActivated();
 
+        InvalidateWindowResizeCapabilities();
         InvalidateSidebarDisplayMode();
         InvalidateSidebarWidth();
         InvalidateWidgetBarWidth();
@@ -134,6 +135,14 @@ public partial class MainPageViewModel : PageViewModelBase<IMainWindowViewNaviga
         }
 
         _eventMessageSender.Send<HomePageDisplayedAfterLoginMessage>();
+    }
+
+    private void InvalidateWindowResizeCapabilities()
+    {
+        if (_mainWindowActivator.Window is MainWindow mainWindow)
+        {
+            mainWindow.InvalidateWindowResizeCapabilities(canResize: true);
+        }
     }
 
     protected override void OnDeactivated()
