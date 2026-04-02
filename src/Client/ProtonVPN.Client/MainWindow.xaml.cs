@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -18,7 +18,6 @@
  */
 
 using System.Runtime.InteropServices;
-using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using ProtonVPN.Client.Core.Bases;
 using ProtonVPN.Client.Core.Extensions;
@@ -83,6 +82,12 @@ public sealed partial class MainWindow : IFocusAware
                     OnSessionEnded();
                 }
                 break;
+            case WM_NCLBUTTONDBLCLK:
+                if (!IsMaximizable && wParam.ToInt32() == HTCAPTION)
+                {
+                    return IntPtr.Zero;
+                }
+                break;
         }
 
         return CallWindowProc(_oldWndProc, hWnd, msg, wParam, lParam);
@@ -113,11 +118,24 @@ public sealed partial class MainWindow : IFocusAware
             WindowContainer.IsTitleBarVisible = isTitleBarVisible;
         }
 
-        IsMinimizable = isTitleBarVisible;
-        IsMaximizable = isTitleBarVisible;
-        IsResizable = isTitleBarVisible;
+        InvalidateWindowResizeCapabilities(isTitleBarVisible);
 
         InvalidateTitleDragArea();
+    }
+
+    public void InvalidateWindowResizeCapabilities(bool canResize)
+    {
+        bool isTitleBarVisible = WindowContainer?.IsTitleBarVisible ?? false;
+
+        if (!isTitleBarVisible)
+        {
+            // When title bar is not visible, the window should not be resizable
+            canResize = false;
+        }
+
+        IsMaximizable = canResize;
+        IsMinimizable = canResize;
+        IsResizable = canResize;
     }
 
     public void InvalidateTitleDragArea()

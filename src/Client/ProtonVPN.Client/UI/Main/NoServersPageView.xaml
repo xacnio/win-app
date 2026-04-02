@@ -25,10 +25,12 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
       xmlns:custom="using:ProtonVPN.Client.Common.UI.Controls.Custom"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:home="using:ProtonVPN.Client.UI.Main.Home"
+      xmlns:markdowntextblock="using:CommunityToolkit.Labs.WinUI.MarkdownTextBlock"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sidebar="using:ProtonVPN.Client.UI.Main.Sidebar"
       xmlns:widgets="using:ProtonVPN.Client.UI.Main.Widgets"
       xmlns:components="using:ProtonVPN.Client.UI.Login.Components"
+      xmlns:pathicons="using:ProtonVPN.Client.Common.UI.Assets.Icons.PathIcons"
       x:DefaultBindMode="OneWay"
       AutomationProperties.AutomationId="NoServersPage"
       AutomationProperties.Name="{x:Bind ViewModel.Localizer.Get('Automation_Properties_NoServers_Page')}"
@@ -69,10 +71,12 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
                         HorizontalAlignment="Center"
                         Spacing="12">
                 <TextBlock HorizontalAlignment="Center"
+                           TextAlignment="Center"
                            Style="{ThemeResource TitleTextBlockStyle}"
                            Text="{x:Bind ViewModel.Title}"
                            TextWrapping="Wrap" />
                 <TextBlock HorizontalAlignment="Center"
+                           TextAlignment="Center"
                            Foreground="{ThemeResource TextWeakColorBrush}"
                            Style="{ThemeResource BodyMediumTextBlockStyle}"
                            Text="{x:Bind ViewModel.Description}"
@@ -101,9 +105,11 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
                             Style="{ThemeResource LargeSecondaryButtonStyle}"
                             Visibility="{x:Bind ViewModel.IsSignOutButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
+
+                <!-- Help section for NoServers scenario -->
                 <Grid HorizontalAlignment="Center"
                       ColumnSpacing="2"
-                      Visibility="{x:Bind ViewModel.HasServersRequestFailed, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      Visibility="{x:Bind ViewModel.IsHelpSectionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -122,6 +128,11 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
                                      Style="{StaticResource DefaultHyperlinkButtonStyle}" />
                 </Grid>
 
+                <!-- Markdown hint section for NoVpnConnectionsAssigned scenario -->
+                <markdowntextblock:MarkdownTextBlock HorizontalAlignment="Center"
+                                                     Config="{x:Bind ViewModel.MarkdownConfig, Mode=OneTime}"
+                                                     Text="{x:Bind ViewModel.HintMarkdown}"
+                                                     Visibility="{x:Bind ViewModel.IsMarkdownHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
         </Grid>
 
@@ -130,5 +141,19 @@ along with ProtonVPN.  If not, see <https://www.gnu.org/licenses/>.
                       VerticalAlignment="Center"
                       IsActive="{x:Bind ViewModel.IsRefreshing}"
                       Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <!-- Skip option is only available on debug builds -->
+        <custom:GhostButton Grid.RowSpan="3"
+                            Margin="20"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Content="Skip"
+                            Command="{x:Bind ViewModel.SkipNoConnectionsPageCommand, Mode=OneTime}"
+                            Visibility="{x:Bind ViewModel.IsDebugModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <custom:GhostButton.RightIcon>
+                <pathicons:ChevronRight Size="Pixels16"/>
+            </custom:GhostButton.RightIcon>
+        </custom:GhostButton>
+                            
     </Grid>
 </Page>

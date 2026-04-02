@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 Proton AG
+ * Copyright (c) 2026 Proton AG
  *
  * This file is part of ProtonVPN.
  *
@@ -62,7 +62,10 @@ public class FeatureFlagsObserver : PollingObserverBase, IFeatureFlagsObserver
     public bool IsBinaryServerStatusEnabled => IsEnabled();
 
     [FeatureFlag("IsWireGuardServerRouteEnabled")]
-    public bool IsWireGuardServerRouteEnabled => IsEnabled();
+    public bool IsWireGuardServerRouteEnabled => IsEnabled();                                                   
+
+    [FeatureFlag("IsNetShieldLevelThreeEnabled")]
+    public bool IsNetShieldLevelThreeEnabled => IsEnabled() && !_settings.VpnPlan.IsB2B; // NetShield Level 3 is not available for B2B users due to lack of support on Gateways
 
     protected override TimeSpan PollingInterval => _config.FeatureFlagsUpdateInterval;
 

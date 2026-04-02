@@ -18,6 +18,7 @@
  */
 
 using ProtonVPN.Client.Logic.Connection.Contracts.Models.Intents;
+using ProtonVPN.Client.Logic.Connection.Contracts.Models.Intents.Features;
 using ProtonVPN.Client.Logic.Connection.Contracts.RequestCreators;
 using ProtonVPN.Client.Logic.Profiles.Contracts.Models;
 using ProtonVPN.Client.Settings.Contracts;
@@ -58,6 +59,12 @@ public class MainSettingsRequestCreator : IMainSettingsRequestCreator
             settings.NetShieldMode = connectionProfile.Settings.IsNetShieldEnabled ? (int)connectionProfile.Settings.NetShieldMode : 0;
             settings.PortForwarding = connectionProfile.Settings.IsPortForwardingEnabled;
             settings.ModerateNat = connectionProfile.Settings.NatType == NatType.Moderate;
+        }
+
+        if (settings.NetShieldMode == (int)NetShieldMode.BlockAdsMalwareTrackersAdultContent
+            && (!_featureFlagsObserver.IsNetShieldLevelThreeEnabled || connectionIntent?.Feature is B2BFeatureIntent))
+        {
+            settings.NetShieldMode = (int)NetShieldMode.BlockAdsMalwareTrackers;
         }
 
         return settings;

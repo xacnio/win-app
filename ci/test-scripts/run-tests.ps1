@@ -2,7 +2,10 @@ param (
     [string]$Category
 )
 
-$output = & VSTest.Console.exe src\bin\e2e\ProtonVPN.UI.Tests.dll /Settings:.testsettings.xml /TestCaseFilter:"Category=$Category"
+New-Item -ItemType Directory -Force -Path "TestResults" | Out-Null
+$reportPath = "TestResults\results_${Category}.xml"
+
+$output = & VSTest.Console.exe src\bin\e2e\ProtonVPN.UI.Tests.dll /Settings:.testsettings.xml /TestCaseFilter:"Category=$Category" /Logger:"junit;LogFilePath=$reportPath"
 $exitCode = $LASTEXITCODE
 
 $keywords = @("BVI-", "BackdropLocal", "missing frame","worldTransform", "0.00, 0.00", "chunk", "decoding stream")

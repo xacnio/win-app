@@ -62,6 +62,7 @@ public class SettingRobot
     protected Element PrimaryActionButton = Element.ByAutomationId("PrimaryButton");
     protected Element CancelButton = Element.ByAutomationId("CloseButton");
     protected Element ExitTheAppButton = Element.ByName("Exit the app");
+    protected Element ExitButton = Element.ByName("Exit");
     protected Element ChangeLogLabel = Element.ByName("Changelog");
     protected Element LicensingLabel = Element.ByAutomationId("LicensingTextBlock");
     protected Element LearnMoreButton = Element.ByName("Learn more");
@@ -69,7 +70,8 @@ public class SettingRobot
 
     protected Element NetshieldToggle = Element.ByAutomationId("NetshieldToggle");
     protected Element NetShieldLevelOneRadioButton = Element.ByAutomationId("NetShieldLevelOne");
-    protected Element NetShieldLevelTwoRadioButton = Element.ByAutomationId("NetShieldLevelTwo");
+    protected Element NetShieldLevelTwoRadioButton = Element.ByAutomationId("NetShieldLevelTwo"); 
+    protected Element NetShieldLevelThreeRadioButton = Element.ByAutomationId("NetShieldLevelThree");
     protected Element KillSwitchToggle = Element.ByAutomationId("KillSwitchToggle");
     protected Element KillSiwtchStandardRadioButton = Element.ByAutomationId("StandardKillSwitchRadioButton");
     protected Element KillSwitchAdvancedRadioButton = Element.ByAutomationId("AdvancedKillSwitchRadioButton");
@@ -234,7 +236,7 @@ public class SettingRobot
     {
         ExitTheAppButton.DoubleClick();
         ExitProtonPopUp.WaitUntilDisplayed();
-        PrimaryActionButton.Click();
+        ExitButton.Click();
         return this;
     }
 
@@ -312,13 +314,17 @@ public class SettingRobot
 
     public SettingRobot SelectNetShieldMode(NetShieldMode netShieldMode)
     {
-        if (netShieldMode == NetShieldMode.BlockMalwareOnly)
+        switch (netShieldMode)
         {
-            NetShieldLevelOneRadioButton.Click();
-        }
-        else if (netShieldMode == NetShieldMode.BlockAdsMalwareTrackers)
-        {
-            NetShieldLevelTwoRadioButton.Click();
+            case NetShieldMode.BlockMalwareOnly:
+                NetShieldLevelOneRadioButton.Click();
+                break;
+            case NetShieldMode.BlockAdsMalwareTrackers:
+                NetShieldLevelTwoRadioButton.Click();
+                break;
+            case NetShieldMode.BlockAdsMalwareTrackersAdultContent:
+                NetShieldLevelThreeRadioButton.Click();
+                break;
         }
 
         return this;
@@ -336,7 +342,7 @@ public class SettingRobot
         }
 
         return this;
-    }  
+    }
 
     public SettingRobot ApplySettings()
     {
